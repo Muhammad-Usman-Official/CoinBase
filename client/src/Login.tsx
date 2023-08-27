@@ -23,12 +23,17 @@ const Login = () => {
         email: email,
         password: password,
       },
-    }).then(() => {
-      setSubmitted(true);
-      setEmail("");
-      setPassword("");
-      navigate("/");
-    });
+    })
+      .then(() => {
+        setSubmitted(true);
+        setEmail("");
+        setPassword("");
+        navigate("/");
+      })
+      .catch(() => {
+        setSubmitted(false);
+        setDisabled(false);
+      });
   };
   useEffect(() => {
     setDisabled(false);
@@ -86,7 +91,7 @@ const Login = () => {
                 } w-full flex outline-none border-none focus:ring-violet-500 justify-center transition-colors ease-out delay-100 cursor-pointer px-3 py-1.5 hover:bg-[#4f585c] ring-1 ring-slate-500 bg-[#94B0B7] text-white rounded-md`}
                 type="submit"
               >
-                Submit{" "}
+                Login{" "}
                 {submitted === false ? (
                   <span className="ml-5">
                     <Spinner />
@@ -97,7 +102,7 @@ const Login = () => {
                 Don't have an account?
                 <Link
                   className="text-white active:opacit-80 hover:text-blue-300 "
-                  to={"/signup"}
+                  to={"/register"}
                 >
                   {" "}
                   Sign Up

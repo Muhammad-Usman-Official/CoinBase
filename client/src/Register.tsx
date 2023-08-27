@@ -4,32 +4,35 @@ import Spinner from "./Spinner";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const SignUp = () => {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
+const Register = () => {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean | null>(null);
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
 
   const navigate = useNavigate();
 
-  const signUp = async (e: React.FormEvent) => {
+  const handlRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(false);
     axios({
-      url: "http://localhost:3000/signup",
+      url: "http://localhost:3000/register",
       method: "post",
       data: {
-        name: `${firstName} ${lastName}`,
+        name: name,
+        username: username.toLowerCase(),
         email: email,
         password: password,
+        confirmpassword: confirmPassword,
       },
     }).then(() => {
       setSubmitted(true);
-      setFirstName("");
-      setLastName("");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
+      setUsername("");
       navigate("/login");
     });
   };
@@ -44,20 +47,20 @@ const SignUp = () => {
               Sign up
             </h1>
             <form
-              onSubmit={signUp}
+              onSubmit={handlRegister}
               className="flex flex-col items-center space-x-3 space-y-4 selection:bg-teal-300 h-ful"
               action=""
             >
               <div className="flex-col flex space-x-2 w-full lg:flex-row text-[#DDDDDA]">
                 <div className="flex flex-col w-full mt-1 space-y-2">
                   <label className="text-[#DDDDDA]" htmlFor="firstName">
-                    First Name
+                    Your Name
                   </label>
                   <input
-                    placeholder="e.g. Muhammad"
-                    value={firstName}
+                    placeholder="e.g. Muhammad Usman"
+                    value={name}
                     onChange={(e) => {
-                      setFirstName(e.currentTarget.value);
+                      setName(e.currentTarget.value);
                     }}
                     className="px-2 py-1 text-gray-800 rounded-md outline-none ring-emerald-300 focus:ring"
                     id="firstName"
@@ -65,17 +68,17 @@ const SignUp = () => {
                   />
                 </div>
                 <div className="flex flex-col mt-1 space-y-2">
-                  <label className="text-[#DDDDDA]" htmlFor="lastName">
-                    Last Name
+                  <label className="text-[#DDDDDA]" htmlFor="username">
+                    Username
                   </label>
                   <input
-                    placeholder="e.g. Usman"
-                    value={lastName}
+                    placeholder="e.g. usman_12"
+                    value={username}
                     onChange={(e) => {
-                      setLastName(e.currentTarget.value);
+                      setUsername(e.currentTarget.value);
                     }}
                     className="px-2 py-1 text-gray-800 rounded-md outline-none ring-emerald-300 focus:ring"
-                    id="lastName"
+                    id="username"
                     type="text"
                   />
                 </div>
@@ -111,21 +114,36 @@ const SignUp = () => {
                     type="password"
                   />
                 </div>
+                <div className="flex flex-col self-start w-full mt-1 space-y-2 text-gray-800">
+                  <label className="text-[#DDDDDA]" htmlFor="confirmPassword">
+                    Confirm password
+                  </label>
+                  <input
+                    placeholder="Re enter your password..."
+                    value={confirmPassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.currentTarget.value);
+                    }}
+                    className="px-2 py-1 text-gray-800 rounded-md outline-none ring-emerald-300 focus:ring"
+                    id="confirmPassword"
+                    type="password"
+                  />
+                </div>
               </div>
               <button
                 className="w-full flex justify-center transition-colors ease-out delay-100 cursor-pointer px-3 py-1.5 hover:bg-[#4f585c] border border-teal-500 text-white rounded-md"
                 type="submit"
               >
-                Submit{" "}
+                Create an account{" "}
                 {submitted === false ? (
                   <span className="ml-5">
                     <Spinner />
                   </span>
                 ) : null}
               </button>
-              <span>
+              <span className="text-slate-300">
                 OR already have an account?{" "}
-                <Link className="text-slate-300" to={"/login"}>
+                <Link className="ml-1 text-slate-100" to={"/login"}>
                   Login
                 </Link>
               </span>
@@ -137,4 +155,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Register;

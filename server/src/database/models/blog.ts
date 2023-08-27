@@ -1,5 +1,15 @@
 import mongoose, { Schema, model } from "mongoose";
 
+interface TBlog {
+  title: string;
+  body: string;
+  tags?: string[];
+  reactions?: number;
+  createdAt: {
+    default: number;
+  };
+}
+
 const blogSchema = new Schema(
   {
     title: { type: String, required: true },
