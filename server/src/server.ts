@@ -7,12 +7,22 @@ import router from "./routes";
 import dbConnect from "./database";
 import errorHandler from "./middlewares/errorHandler";
 import { TUserDto } from "./types/types";
+import { PORT } from "./config";
+import { staticFilesOptions } from "./utils";
 
-const PORT = process.env.PORT || 3000;
+// Express App
 const app = express();
+
+// FOR DEVELOPMENT USE ONLY
 app.use(cors());
+
+// Serve JSON FILES middleware
+app.use(express.json());
+
+// FOR MANIPULATING COOKIES
 app.use(cookieParser());
 
+// EXTENDING Request object of EXPRESS
 declare global {
   namespace Express {
     interface Request {
@@ -21,6 +31,13 @@ declare global {
   }
 }
 
+// serve static files like images
+app.use("/public", express.static("src/public", staticFilesOptions));
+
+// ROUTES HANDLER MIDDLEWARE
+app.use(router);
+
+// DB CONNECTION
 (async () => {
   await dbConnect()
     .then(() => {
@@ -32,6 +49,5 @@ declare global {
     });
 })();
 
-app.use(express.json());
-app.use(router);
+// MIDDLEWARE FOR ERROR HANDLING
 app.use(errorHandler);

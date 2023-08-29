@@ -1,21 +1,12 @@
 import mongoose, { Schema, model } from "mongoose";
+import { TBlog } from "../../types/types";
 
-interface TBlog {
-  title: string;
-  body: string;
-  tags?: string[];
-  reactions?: number;
-  createdAt: {
-    default: number;
-  };
-}
-
-const blogSchema = new Schema(
+const blogSchema = new Schema<TBlog>(
   {
     title: { type: String, required: true },
     photoPath: { type: String, required: true },
     content: { type: String, required: true },
-    author: { type: mongoose.SchemaTypes.ObjectId, ref: "user" },
+    author: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

@@ -27,4 +27,4 @@ const UserSchema = new Schema<types.TUser>(
   { timestamps: true }
 );
 
-export const User = model("User", UserSchema);
+export const User = model("User", UserSchema, "users");
