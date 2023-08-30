@@ -32,7 +32,7 @@ router.delete("/blog/:blogId", deleteBlogController);
 
 // comments:
 // create
-// router.post("/comment", auth, createCommentController);
+router.post("/comment", auth, createCommentController);
 // get
-// router.get("/comment/:blogId", auth, getCommentByIdController);
+router.get("/comment/:blogId", auth, getCommentByIdController);
 export default router;

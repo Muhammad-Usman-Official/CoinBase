@@ -6,7 +6,7 @@ export interface TUserAuth {
   email: string;
   password: string;
   consfirmPassword: string;
-  createdAt?: number | any;
+  createdAt?: Date;
   avatar?: string;
   _id: Types.ObjectId;
 }
@@ -16,7 +16,7 @@ export interface TUser {
   name: string;
   email: string;
   password: string;
-  createdAt?: number | any;
+  createdAt?: Date;
   avatar?: string;
   _id: Types.ObjectId;
 }
@@ -39,7 +39,7 @@ export interface TBlog {
   content: string;
   author: Types.ObjectId;
   createdAt: {
-    default: number;
+    default: Date;
   };
 }
 
@@ -53,7 +53,21 @@ export interface TBLogDetails {
   authorName: string;
   authorUserName: string;
   authorEmail: string;
-  createdAt: number;
+  createdAt: Date;
+}
+
+export interface TComment {
+  author: Types.ObjectId;
+  blog: Types.ObjectId;
+  content: string;
+}
+
+export interface TCommentDto {
+  author: TUser;
+  _id: Types.ObjectId;
+  createdAt: Date;
+  content: string;
+  authorUsername: string;
 }
 
 namespace rootType {
@@ -62,6 +76,8 @@ namespace rootType {
   export type TUserAuth = import("./types").TUserAuth;
   export type TBlog = import("./types").TBlog;
   export type TBlogDetails = import("./types").TBLogDetails;
+  export type TComment = import("./types").TComment;
+  export type TCommentDto = import("./types").TCommentDto;
 }
 
 export default rootType;

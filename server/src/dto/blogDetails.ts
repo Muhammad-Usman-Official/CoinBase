@@ -8,7 +8,7 @@ export default class BlogDetailsDTO {
   photo: string;
   authorName: string;
   authorUserName: string;
-  createdAt: number;
+  createdAt: Date;
   authorEmail: string;
   constructor(blog: TBLogDetails) {
     this._id = blog._id;
