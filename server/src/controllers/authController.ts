@@ -66,8 +66,8 @@ const authController = {
         password: hashedPass,
       });
       user = await userToRegister.save();
-      accessToken = JWTService.signAccessToken({ _id: user._id }, "30m");
-      refreshToken = JWTService.signRefreshToken({ _id: user._id }, "60m");
+      accessToken = JWTService.signAccessToken({ _id: user._id }, "1d");
+      refreshToken = JWTService.signRefreshToken({ _id: user._id }, "2d");
       userDto = new userDTO(user);
     } catch (err) {
       return next(err);

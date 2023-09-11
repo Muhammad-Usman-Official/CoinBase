@@ -26,26 +26,10 @@
   }
 }
 
-.pattern {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  background-color: #162086;
-  opacity: 0.1;
-  background-image: linear-gradient(135deg, #7697a0 25%, transparent 25%),
-    linear-gradient(225deg, #7697a0 25%, transparent 25%),
-    linear-gradient(45deg, #7697a0 25%, transparent 25%),
-    linear-gradient(315deg, #7697a0 25%, #818181 25%);
-  background-position: 13px 0, 13px 0, 0 0, 0 0;
-  background-size: 26px 26px;
-  background-repeat: repeat;
-}
-
-.pattern::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+/* ADDS AN LIGTH LITTLE GRADIENT SEPARATOR IN THE BOTTOM ON THE NAVBAR */
+.nav-separator {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-image: linear-gradient(to right, #475569 0%, #c4ccff 30% 70%, #475569)
+    0 0 100%;
 }

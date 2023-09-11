@@ -14,7 +14,7 @@ import { staticFilesOptions } from "./utils";
 const app = express();
 
 // FOR DEVELOPMENT USE ONLY
-app.use(cors());
+app.use(cors({ origin: process.env.FRONT_END_URL_PATH, credentials: true }));
 
 // Serve JSON FILES middleware
 app.use(express.json());
