@@ -13,7 +13,6 @@ import Navbar from "./components/Navbar.tsx";
 import Protected from "./components/Protected.tsx";
 import { Provider } from "react-redux";
 import store from "./store/index.ts";
-import { useAppSelector } from "./hooks/hooks.ts";
 
 const Layout = () => {
   return (
