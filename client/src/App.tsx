@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import SingleArticle from "./components/SingleArticle";
+import { useState, useEffect } from "react";
+import SingleNewsArticle from "./components/SingleNewsArticle";
 import { TArticle, TNewsApi } from "./types";
 import { fetchNews } from "./api/external";
 import Spinner from "./components/Spinner";
@@ -26,16 +26,19 @@ const App = () => {
   }
   return (
     <div className={"bg-white min-h-screen text-slate-900"}>
-      <div className="container px-4 py-2 mx-auto">
-        <h1 className="text-3xl text-center pt-3 pb-5">Latest Articles</h1>
-        <section className="flex flex-wrap gap-2 ">
+      <div className="container px-4 pb-2 mx-auto">
+        <h1 className="py-8 text-5xl font-bold text-center font-roboto-600">
+          Latest Articles
+        </h1>
+        <section className="grid gap-5 place-items-center">
           {loading ? (
             <pre className="absolute scale-[200%] left-[50%] top-[50%]">
               <Spinner />
             </pre>
           ) : (
-            articles?.map((article: TArticle) => (
-              <SingleArticle
+            articles?.map((article: TArticle, index: number) => (
+              <SingleNewsArticle
+                key={index}
                 article={article}
                 handleCardClick={handleCardClick}
               />

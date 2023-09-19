@@ -4,15 +4,14 @@ import Joi from "joi";
 import fs from "fs";
 import { BACKEND_SERVER_PATH } from "../config";
 import BlogDTO from "../dto/blog";
-import { SchemaTypeOptions } from "mongoose";
-import { TBlog } from "../types/types";
 import { mongoIdPattern } from "../utils/index";
+import { TCreateBlog } from "../types/types";
 
 export default async function createBlogController(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<Response | void> {
   /*
    * validate req body
    * handle photo storage, naming
@@ -59,11 +58,11 @@ export default async function createBlogController(
       author,
       content,
       photoPath: `${BACKEND_SERVER_PATH}/public/${imageName}`,
-    } as SchemaTypeOptions<TBlog>);
+    });
   } catch (err) {
     return next(err);
   }
   const blog = await newBlog.save();
-  const blogDto = new BlogDTO(blog);
+  const blogDto: TCreateBlog = new BlogDTO(blog);
   return res.status(201).json({ blog: blogDto });
 }

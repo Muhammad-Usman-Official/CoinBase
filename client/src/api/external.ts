@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosResponse } from "axios";
 import { newsApiKey } from "../config";
 import { TCoin, TNewsApi } from "../types";
@@ -28,6 +29,5 @@ export const fetchCoins = async (): Promise<AxiosResponse> => {
   } catch (err: any) {
     return err;
   }
-  console.log(res);
   return res;
 };

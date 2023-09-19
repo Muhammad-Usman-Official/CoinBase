@@ -12,7 +12,7 @@ export default async function deleteBlogController(
   const { blogId } = req.params;
 
   const deleteBlogSchema = Joi.object({
-    _id: Joi.string().regex(mongoIdPattern).required(),
+    blogId: Joi.string().regex(mongoIdPattern).required(),
   });
 
   const { error } = deleteBlogSchema.validate(req.params);

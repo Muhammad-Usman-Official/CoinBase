@@ -1,5 +1,15 @@
-import axios from "axios";
-import { TLoginCredentials, TRegisterCredentials } from "../types";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios, { AxiosResponse } from "axios";
+import {
+  TBlog,
+  TComment,
+  TEditBlog,
+  TLoginCredentials,
+  TPostComment,
+  TRegisterCredentials,
+  TSubmitBLog,
+  TUser,
+} from "../types";
 
 const homeUri = "http://localhost:3000";
 
@@ -11,25 +21,25 @@ const api = axios.create({
   },
 });
 
-export const login = async (loginCredentials: unknown) => {
-  let response;
+export const login = async (loginCredentials: TLoginCredentials) => {
+  let response: AxiosResponse<TUser>;
 
   try {
     response = await api.post(`/login`, loginCredentials);
-  } catch (err) {
+  } catch (err: any) {
     return err;
   }
 
   return response;
 };
 
-export const register = async (registerCredentials: unknown) => {
-  let response;
+export const register = async (registerCredentials: TRegisterCredentials) => {
+  let response: any;
 
   try {
     response = await api.post("/register", registerCredentials);
-  } catch (err: unknown) {
-    return console.log(err);
+  } catch (err: any) {
+    return err;
   }
 
   return response;
@@ -40,8 +50,99 @@ export const logout = async () => {
 
   try {
     response = await api.post("/logout");
-    console.log("Logout response: ", response);
   } catch (err) {
+    return err;
+  }
+
+  return response;
+};
+
+export const fetchBlogs = async (): Promise<AxiosResponse> => {
+  let response: AxiosResponse<TBlog[]>;
+  try {
+    response = await api.get("/blog/all");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    return err;
+  }
+  return response;
+};
+
+export const fetchBLogById = async (blogId: string) => {
+  let response: AxiosResponse<TBlog>;
+
+  try {
+    response = await api.get(`/blog/${blogId}`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    return err;
+  }
+
+  return response;
+};
+
+export const postBlog = async (data: TSubmitBLog): Promise<AxiosResponse> => {
+  let response: AxiosResponse<TSubmitBLog>;
+  try {
+    response = await api.post("/blog", data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    return err;
+  }
+  return response;
+};
+
+export const fetchComments = async (blogId: string) => {
+  let response: AxiosResponse<TComment>;
+  try {
+    response = await api.get(`/comment/${blogId}`);
+  } catch (err: any) {
+    return err;
+  }
+  return response;
+};
+
+export const createComment = async (data: TPostComment) => {
+  let response: AxiosResponse<{ message: string }>;
+
+  try {
+    response = await api.post("/comment", data);
+  } catch (err: any) {
+    return err;
+  }
+
+  return response;
+};
+
+export const deleteBlog = async (blogId: string) => {
+  let response: AxiosResponse<{ message: string }>;
+  try {
+    response = await api.delete(`/blog/${blogId}`);
+  } catch (error: any) {
+    return error;
+  }
+
+  return response;
+};
+
+export const editBlog = async (blog: TEditBlog) => {
+  let response: AxiosResponse<{
+    message: string;
+  }>;
+  try {
+    response = await api.put("/blog", blog);
+  } catch (error: any) {
+    return error;
+  }
+
+  return response;
+};
+
+export const refreshUser = async () => {
+  let response;
+  try {
+    response = await api.get("/refresh");
+  } catch (err: any) {
     return err;
   }
 

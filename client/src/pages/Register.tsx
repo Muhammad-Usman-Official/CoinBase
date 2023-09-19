@@ -10,7 +10,8 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store/userSlice";
 
 const Register = () => {
-  const [submitted, setSubmitted] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { values, touched, handleBlur, handleChange, errors } = useFormik({
     initialValues: {
       name: "",
@@ -30,7 +31,7 @@ const Register = () => {
 
   const handlRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(false);
+    setLoading(true);
 
     const registerCredentials = {
       name: values.name,
@@ -39,24 +40,39 @@ const Register = () => {
       password: values.password,
     };
 
-    await register(registerCredentials)
-      .then((res: any) => {
-        const user = res.data.user;
-        const status = res.config.status;
-        setSubmitted(true);
-        values.email = "";
-        values.username = "";
-        values.name = "";
-        values.password = "";
-        values.confirmPassword = "";
-        if (status === 201) {
-          dispatch(setUser(user));
-        }
-        navigate("/login");
-      })
-      .catch((err) => {
-        return console.log(err.message);
-      });
+    const response = await register(registerCredentials);
+
+    const errorMessage = response?.response?.data?.message;
+    const resCode = response?.code;
+    if (response.status === 400) {
+      setLoading(false);
+      setError(errorMessage);
+    } else if (resCode === "ERR_NETWORK") {
+      setLoading(false);
+      setError(errorMessage + " OR server down");
+    } else if (response.status === 200) {
+      navigate("/");
+    } else if (resCode !== "ERR_NETWORK") {
+      setLoading(false);
+      console.log(response);
+      setError(errorMessage);
+    } else {
+      setLoading(false);
+      console.log(response);
+      setError(errorMessage);
+    }
+    const user = await response.data.user;
+    const status = response.status;
+    values.email = "";
+    values.username = "";
+    values.name = "";
+    values.password = "";
+    values.confirmPassword = "";
+    if (status === 201) {
+      dispatch(setUser(user));
+      setLoading(false);
+      navigate("/login");
+    }
   };
 
   const emailErrorCondition = errors.email && touched.email ? 1 : undefined;
@@ -196,6 +212,15 @@ const Register = () => {
                 </div>
               </div>
               <button
+                disabled={
+                  errors.email ||
+                  errors.password ||
+                  errors.confirmPassword ||
+                  errors.name ||
+                  errors.username
+                    ? true
+                    : false
+                }
                 className={`${
                   errors.name ||
                   errors.email ||
@@ -208,7 +233,7 @@ const Register = () => {
                 type="submit"
               >
                 Create an account{" "}
-                {submitted === false ? (
+                {loading ? (
                   <span className="ml-5">
                     <Spinner />
                   </span>
@@ -223,6 +248,7 @@ const Register = () => {
                   Login
                 </Link>
               </span>
+              {error ? <span className="text-red-600">{error}</span> : null}
             </form>
           </div>
         </div>

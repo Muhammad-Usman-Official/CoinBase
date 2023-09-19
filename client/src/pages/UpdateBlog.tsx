@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TextInput from "../components/TextInput";
-import { TState } from "../types";
+import { TEditBlog, TState } from "../types";
 import { useSelector } from "react-redux";
-import { postBlog } from "../api/internal";
+import { editBlog, fetchBLogById } from "../api/internal";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import { useParams } from "react-router-dom";
 
-const SubmitBlog = () => {
+const UpdateBlog = () => {
   const navigate = useNavigate();
+  const { blogId } = useParams();
+
   const [input, setInput] = React.useState<{
     title: string;
     content: string;
@@ -25,38 +28,45 @@ const SubmitBlog = () => {
 
   const handleError = () => {
     if (input.title === "" || input.content === "") {
-      setError("Cannot post either title or description is empty!");
+      setError("Cannot post, either title or description is empty!");
       return;
     } else {
       setError(null);
     }
   };
 
-  const handleBlogSumit = async (e: React.FormEvent) => {
+  const handleBlogUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     if (input.title === "" || input.content === "") {
-      setError("Cannot post either title or description is empty!");
+      setError("Cannot post either, title or description is empty!");
       setLoading(false);
-      return;
+    }
+    let data: TEditBlog;
+    if (input.photo!.toString().includes("http")) {
+      data = {
+        author: author,
+        blogId: blogId!,
+        title: input.title,
+        content: input.content,
+      };
+    } else {
+      data = {
+        author: author,
+        blogId: blogId!,
+        ...input,
+      };
     }
 
-    const data = {
-      author: author,
-      ...input,
-    };
-
-    const res = await postBlog(data);
+    const res = await editBlog(data);
     if (res.status === 200) {
       setMessage(res.statusText);
     }
 
     setLoading(false);
     setInput({ title: "", content: "", photo: "" });
-    if (res.data.message !== "jwt expired" && res.status === 200) {
-      navigate("/blogs");
-    }
+    navigate(`/blog/${blogId}`);
   };
 
   const handleGetPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,13 +80,25 @@ const SubmitBlog = () => {
       });
     };
   };
-
+  useEffect(() => {
+    (async () => {
+      const response = await fetchBLogById(blogId!);
+      const blog = response.data.blog;
+      if (response.status === 200) {
+        setInput({
+          title: blog.title,
+          content: blog.content,
+          photo: blog.photo,
+        });
+      }
+    })();
+  }, []);
   return (
     <article className="min-h-screen pb-3 text-indigo-200 bg-indigo-950">
       <form
         action=""
-        onSubmit={handleBlogSumit}
-        className="container flex flex-col items-center max-w-xl pt-3 pb-3 mx-auto gap-y-3"
+        onSubmit={handleBlogUpdate}
+        className="container flex flex-col items-center max-w-5xl pt-3 pb-3 mx-auto gap-y-3"
       >
         {/* <input type="text" /> */}
         <section className="w-full py-2 mx-auto space-y-4">
@@ -102,7 +124,7 @@ const SubmitBlog = () => {
           />
         </section>
         <section className="w-full py-2 space-y-4">
-          <label className="text-2xl" htmlFor="content">
+          <label className="text-2xl" htmlFor="blogDescription">
             Blog Description
           </label>
           <textarea
@@ -114,7 +136,7 @@ const SubmitBlog = () => {
                 content: e.currentTarget.value,
               });
             }}
-            rows={5}
+            rows={11}
             id="content"
             name="content"
             placeholder="Your blog description goes here..."
@@ -124,29 +146,29 @@ const SubmitBlog = () => {
         </section>
         <section className="w-full mx-auto">
           <label className="text-2xl" htmlFor="photo">
-            Picture for blog
+            Upload picture if you want to change it
           </label>
           <input
+            name="photo"
+            id="photo"
             accept="image/jpg, image/jpeg, image/png"
-            className="block w-full"
+            className="block w-full my-3"
             onChange={handleGetPhoto}
             type="file"
           />
-          {input.photo !== "" ? (
-            <div className="w-full pt-2 pb-3 h-fit">
-              <img
-                alt=""
-                className="object-contain"
-                src={input.photo!.toString()}
-              />
-            </div>
-          ) : null}
+          <div className="w-full h-fit pb-3 pt-2">
+            <img
+              alt=""
+              className="object-contain"
+              src={input.photo!.toString()}
+            />
+          </div>
         </section>
         <button
           className="flex justify-center w-full max-w-xl px-3 py-1 transition-colors rounded-lg gap-x-3 ring ring-indigo-900 hover:bg-indigo-900 bg-indigo-950"
           type="submit"
         >
-          <span>Post Blog</span> {loading ? <Spinner /> : null}
+          <span>Update Blog</span> {loading ? <Spinner /> : null}
         </button>
         {error || message ? (
           <span className={`${error ? "text-red-600" : "text-blue-500"}`}>
@@ -158,4 +180,4 @@ const SubmitBlog = () => {
   );
 };
 
-export default SubmitBlog;
+export default UpdateBlog;

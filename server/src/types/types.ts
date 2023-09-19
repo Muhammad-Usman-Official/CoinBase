@@ -43,6 +43,15 @@ export interface TBlog {
   };
 }
 
+export interface TCreateBlog {
+  _id: Types.ObjectId;
+  author: Types.ObjectId;
+  title: string;
+  content: string;
+  photo: string;
+  photoPath?: string;
+}
+
 export interface TBLogDetails {
   author: TUser;
   content: string;

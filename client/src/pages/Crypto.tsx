@@ -6,7 +6,7 @@ import Spinner from "../components/Spinner";
 
 const Crypto = () => {
   const [coins, setCoins] = React.useState<TCoin[]>([]);
-  const [error, setError] = React.useState<any>(undefined);
+  const [error, setError] = React.useState<string>(undefined);
   const [loading, setLoading] = React.useState<boolean | null>(null);
 
   useEffect(() => {
@@ -21,44 +21,61 @@ const Crypto = () => {
         setLoading(false);
       }
     })();
-  });
+    // cleanup
+    setCoins([]);
+  }, []);
 
   return (
-    <div className="bg-blue-950 min-h-screen pt-2">
+    <div className="min-h-screen pt-2 overflow-x-scroll md:overflow-auto bg-blue-950">
       {coins.length === 0 ? (
         <pre className="absolute scale-[200%] left-[50%] top-[50%]">
           <Spinner />
         </pre>
       ) : (
-        <table className="table-auto container mx-auto border border-indigo-900 border-collapse">
-          <thead className="table-header-group">
-            <tr className="table-row text-2xl text-slate-50">
-              <th className="table-cell border border-indigo-900 px-3 py-2">
+        <table className="container mx-auto border border-collapse border-indigo-900 table-auto">
+          <thead key={"thead_1"} className="table-header-group">
+            <tr key={"thead_tr_1"} className="table-row text-2xl text-slate-50">
+              <th
+                key={"thead_tr_th_1"}
+                className="table-cell px-3 py-2 border border-indigo-900"
+              >
                 #
               </th>
-              <th className="table-cell border border-indigo-900 px-3 py-2">
+              <th
+                key="thead_tr_th_2"
+                className="table-cell px-3 py-2 border border-indigo-900"
+              >
                 Coin
               </th>
-              <th className="table-cell border border-indigo-900 px-3 py-2">
+              <th
+                key="thead_tr_th_3"
+                className="table-cell px-3 py-2 border border-indigo-900"
+              >
                 Symbol
               </th>
-              <th className="table-cell border border-indigo-900 px-3 py-2">
+              <th
+                key="thead_tr_th_4"
+                className="table-cell px-3 py-2 border border-indigo-900"
+              >
                 Price
               </th>
-              <th className="table-cell border border-indigo-900 px-3 py-2">
+              <th
+                key="thead_tr_th_5"
+                className="table-cell px-3 py-2 border border-indigo-900"
+              >
                 24h
               </th>
             </tr>
           </thead>
-          {!error ? (
-            coins?.map((coin: TCoin, index: number) => (
-              <tbody className="table-row-group">
+          <tbody className="table-footer-group">
+            {!error ? (
+              coins?.map((coin: TCoin, index: number) => (
                 <SingleCoin index={index} key={coin.id} coin={coin} />
-              </tbody>
-            ))
-          ) : (
-            <pre>{error}</pre>
-          )}
+              ))
+            ) : (
+              <pre>{error}</pre>
+            )}
+          </tbody>
         </table>
       )}
     </div>

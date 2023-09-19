@@ -66,8 +66,8 @@ const authController = {
         password: hashedPass,
       });
       user = await userToRegister.save();
-      accessToken = JWTService.signAccessToken({ _id: user._id }, "1d");
-      refreshToken = JWTService.signRefreshToken({ _id: user._id }, "2d");
+      accessToken = JWTService.signAccessToken({ _id: user._id }, "30m");
+      refreshToken = JWTService.signRefreshToken({ _id: user._id }, "60m");
       userDto = new userDTO(user);
     } catch (err) {
       return next(err);
@@ -76,7 +76,7 @@ const authController = {
     //store refresh token in db
     await JWTService.storeRefreshToken(refreshToken, user._id);
     res.cookie("accessToken", accessToken, {
-      maxAge: 1000 * 60 * 24,
+      maxAge: 1000 * 60 * 60,
       httpOnly: true, // prevent XSS attacks
     });
     res.cookie("refreshToken", refreshToken, {
@@ -210,7 +210,7 @@ const authController = {
 
       const refreshToken = JWTService.signRefreshToken({ _id: id }, "60m");
 
-      await RefreshToken.updateOne({ token: refreshToken }, { userId: id });
+      await RefreshToken.updateOne({ token: refreshToken }, { _id: id });
 
       res.cookie("refreshToken", refreshToken, {
         maxAge: 1000 * 60 * 60 * 24,

@@ -1,20 +1,33 @@
 import { TCoin } from "../types";
 
 const SingleCoin = ({ coin, index }: { coin: TCoin; index: number }) => {
-  const serialNumber = index + 1;
   return (
-    <tr className="table-row text-xl text-indigo-200">
-      <td className="border border-indigo-900 table-cell py-2 pl-3">
-        {serialNumber}
+    <tr
+      id={coin.id}
+      tabIndex={index}
+      key={coin.id}
+      className="table-row text-xl text-indigo-200"
+    >
+      <td className="table-cell py-2 pl-3 border border-indigo-900">
+        {coin.market_cap_rank}
       </td>
-      <td className="border border-indigo-900 table-cell py-2 pl-3">
-        {coin.name}
+      <td className="table-cell py-2 pl-3 border border-indigo-900">
+        <div className="flex items-center min-w-[150px] gap-x-4 md:gap-x-5">
+          <img
+            className="object-contain w-6 md:w-8 aspect-square"
+            src={coin.image}
+            alt={coin.name}
+          />
+          <span className="block text-[17px] font-semibold md:text-xl">
+            {coin.name}
+          </span>
+        </div>
       </td>
-      <td className="border border-indigo-900 table-cell py-2 pl-3">
+      <td className="table-cell py-2 pl-3 border border-indigo-900">
         {coin.symbol}
       </td>
-      <td className="border border-indigo-900 table-cell py-2 pl-3">
-        {coin.current_price}
+      <td className="table-cell px-3 py-2 border border-indigo-900">
+        ${coin.current_price}
       </td>
       <td
         className={`${

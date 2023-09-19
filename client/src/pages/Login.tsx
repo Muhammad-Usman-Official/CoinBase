@@ -1,74 +1,112 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Spinner from "../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import TextInput from "../components/TextInput";
 import loginSchema from "../schemas/loginSchema";
-import { login } from "../api/internal";
+import { login, refreshUser } from "../api/internal";
 import { setUser } from "../store/userSlice";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../hooks/hooks";
+import { AxiosError, AxiosResponse } from "axios";
+import { TLoginUser } from "../types";
 
 const Login = () => {
-  const [submitted, setSubmitted] = useState<boolean | null>(null);
-  const [error, setError] = useState("");
-  const { values, touched, handleBlur, handleChange, errors } = useFormik({
+  const [loading, setLoading] = useState<boolean | null>(null);
+  const [error, setError] = useState<string | null>();
+  const { values, touched, handleBlur, handleChange, errors } = useFormik<{
+    /* initialValues types */
+    email: string;
+    password: string;
+  }>({
     initialValues: {
+      /* Initial Values */
       email: "",
       password: "",
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      console.log(
+        "log of <Login /> component printing values of onSubmit function inside of useFormik hook: ",
+        values
+      );
     },
   });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(false);
+    setLoading(true);
 
     const loginCredentials = {
       email: values.email,
       password: values.password,
     };
 
-    await login(loginCredentials)
-      .then((res: any) => {
-        const data = res.data;
-        setSubmitted(true);
-        const user = {
-          _id: data?.user?._id,
-          email: data?.user?.username,
-          username: data?.user?.username,
-          auth: data?.auth,
-        };
-        dispatch(setUser(user));
-        console.log(res);
-        if (res.code === "ERR_BAD_REQUEST") {
-          const message = res.response.data.message;
-          setError(message);
-        }
+    const res = await login(loginCredentials);
+
+    if (res.status === 400) {
+      const message = res.data.message;
+      setError(message);
+      setLoading(false);
+    } else if (res.code === "ERR_NETWORK") {
+      const message = res.message;
+      setError(message + " OR server down");
+      setLoading(false);
+    } else if (res.status === 200) {
+      setLoading(false);
+      setError(null);
+      navigate("/");
+    } else if (res.code !== "ERR_NETWORK") {
+      setLoading(false);
+      setError(res.message);
+    } else {
+      setLoading(false);
+      console.log(res);
+      setError(res.message);
+    }
+
+    const data = await res.data;
+    setLoading(true);
+    const user = {
+      _id: data?.user?._id,
+      email: data?.user?.email,
+      username: data?.user?.username,
+      auth: data?.auth,
+    };
+    dispatch(setUser(user));
+  };
+
+  useEffect(() => {
+    refreshUser()
+      .then((res: AxiosResponse<TLoginUser>) => {
         if (res.status === 200) {
+          const data = res.data;
+          const user = {
+            _id: data.user._id,
+            email: data.user.email,
+            username: data.user?.username,
+            auth: data.auth,
+          };
+          console.log(res);
+          dispatch(setUser(user));
           navigate("/");
         }
       })
-      .catch((err) => {
-        setSubmitted(false);
-        console.log(err);
-        setError(err.message);
+      .catch((err: AxiosError) => {
+        console.log(err.message);
       });
-  };
+  }, []);
 
   const emailErrorCondition = errors.email && touched.email ? 1 : undefined;
   const passwordErrorCondition =
     errors.password && touched.password ? 1 : undefined;
   return (
     <>
-      <div className="bg-[#13032f] max-h-screen overflow-hidden">
-        <div className="container flex flex-col-reverse items-center justify-center min-h-screen mx-auto lg:flex-row">
-          <div className="lg:w-2/5 w-[90vw] lg:translate-y-0 -translate-y-32 z-[2] px-8 mx-auto lg:bg-[#94B0B7]/10 bg-[#2d283f]/60 max-w-lg backdrop-blur-sm py-7 rounded-xl ">
+      <div className="bg-[#13032f] overflow-auto">
+        <div className="container flex flex-col-reverse items-center justify-center h-screen mx-auto lg:flex-row">
+          <div className="lg:w-2/5 w-[90vw] lg:translate-y-0 md:-translate-y-32 -translate-y-12 z-[2] px-8 lg:bg-[#94B0B7]/10 bg-[#2d283f]/60 max-w-lg backdrop-blur-sm py-7 rounded-xl">
             <h1 className="pb-5 mx-auto text-3xl text-[#C2C8C5] w-fit">
               Login
             </h1>
@@ -131,7 +169,7 @@ const Login = () => {
                     type="submit"
                   >
                     Login
-                    {submitted === false ? (
+                    {loading ? (
                       <span className="ml-5">
                         <Spinner />
                       </span>
@@ -140,13 +178,13 @@ const Login = () => {
                   <span className="mt-2 text-violet-300 place-self-center">
                     Don't have an account?
                     <Link
-                      className="text-violet-200 hover:underline underline-offset-[5px] ml-2 active:opacit-80 hover:text-emerald-100"
+                      className="text-black hover:underline underline-offset-[5px] ml-2 active:opacit-80 hover:text-emerald-100"
                       to={"/register"}
                     >
                       Sign Up
                     </Link>
                   </span>
-                  {error !== "" ? (
+                  {error === null ? (
                     <span className="font-bold text-red-600 ">{error}!</span>
                   ) : (
                     ""
@@ -155,7 +193,7 @@ const Login = () => {
               </div>
             </form>
           </div>
-          <div className="lg:max-h-[80vh] h-[40%] w-full lg:top-0 lg:bottom-0 absolute bottom-0 lg:static flex lg:animate-pulse items-center justify-center">
+          <div className="lg:max-h-[80vh] max-lg:overflow-hidden h-[40%] w-full lg:top-0 lg:bottom-0 absolute bottom-0 lg:static flex lg:animate-pulse items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               data-name="Layer 1"

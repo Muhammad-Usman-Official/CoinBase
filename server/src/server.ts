@@ -17,7 +17,11 @@ const app = express();
 app.use(cors({ origin: process.env.FRONT_END_URL_PATH, credentials: true }));
 
 // Serve JSON FILES middleware
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "50mb",
+  })
+);
 
 // FOR MANIPULATING COOKIES
 app.use(cookieParser());

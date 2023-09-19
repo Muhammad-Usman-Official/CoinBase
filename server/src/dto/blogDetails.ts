@@ -15,9 +15,9 @@ export default class BlogDetailsDTO {
     this.content = blog.content;
     this.title = blog.title;
     this.photo = blog.photoPath;
-    this.authorName = blog.author.name;
-    this.authorEmail = blog.author.email;
+    this.authorName = blog.author?.name;
+    this.authorEmail = blog.author?.email;
     this.createdAt = blog.createdAt;
-    this.authorUserName = blog.author.username;
+    this.authorUserName = blog.author?.username;
   }
 }
