@@ -27,14 +27,6 @@ const SingleBlogPage = () => {
   const [reRender, setReRender] = useState<boolean>(false);
 
   const auth = useAppSelector((state) => state.user.auth);
-  if (auth === false) {
-    refreshUser()
-      .then((res: void | AxiosResponse | AxiosError) => {
-        // dispatch(setUser(res))
-        console.log(res);
-      })
-      .catch((err: void | AxiosError) => console.log(err));
-  }
   const { blogId } = useParams();
   const author = useAppSelector((state) => state.user._id);
   const authorUserName = useAppSelector((state) => state.user.username);
@@ -60,18 +52,20 @@ const SingleBlogPage = () => {
     e.preventDefault();
     const confirmation = confirm("You are going to delete the blog!");
     if (confirmation) {
+      setLoading(true);
       if (!blogId) return;
 
-      const response = await deleteBlog(blogId);
-
-      if (response.status !== 200 || response.response.status !== 200) {
-        setError(response.data.message);
-      }
-      if (response.status === 200) {
-        setSuccessMessage(response.data.message);
-        navigate("/blogs");
-      }
+      deleteBlog(blogId)
+        .then((response: AxiosResponse) => {
+          setSuccessMessage(response.data.message);
+          navigate("/blogs");
+        })
+        .catch((err: AxiosError) => {
+          if (err.status) setError(err.message);
+        });
+      setLoading(false);
     }
+    setReRender(!reRender);
     return;
   };
 
@@ -140,7 +134,7 @@ const SingleBlogPage = () => {
 
   return (
     <>
-      {!blog ? (
+      {!blog || loading ? (
         <Loader text="Loading..." absolute={true} />
       ) : (
         <div className="min-h-screen text-indigo-100 bg-slate-950">

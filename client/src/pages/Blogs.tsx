@@ -2,54 +2,73 @@ import React, { useEffect } from "react";
 import { TBlog } from "../types";
 import { fetchBlogs, refreshUser } from "../api/internal";
 import SingleBlog from "../components/SingleBlog";
-import Spinner from "../components/Spinner";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { resetUser } from "../store/userSlice";
+import { resetUser, setUser } from "../store/userSlice";
+import Loader from "../components/Loader";
+import { AxiosError, AxiosResponse } from "axios";
 
 const Blogs = () => {
   const [blogs, setBlogs] = React.useState<TBlog[]>([]);
   const [error, setError] = React.useState<string | undefined>(undefined);
   const [loading, setLoading] = React.useState<null | boolean>(null);
+  const [reRender, setReRender] = React.useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.user.auth);
-  console.log(auth);
-  if (!auth) {
-    refreshUser().catch((err) => {
-      console.log(err);
-    });
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const resetUserState = async (res: any) => {
-    if (res.response.status === 401) {
-      dispatch(resetUser());
-    }
+  if (!auth) setReRender(!reRender);
+
+  const resetUserState = () => {
+    dispatch(resetUser());
+    setReRender(!reRender);
+  };
+
+  const updateUserState = async () => {
+    refreshUser()
+      .then((res: AxiosResponse) => {
+        setLoading(true);
+        const data = res.data;
+        const user = {
+          auth: data.auth,
+          _id: data.user._id,
+          username: data.user.username,
+          email: data.user.email,
+        };
+        dispatch(setUser(user));
+        setLoading(false);
+      })
+      .catch((err: AxiosError) => {
+        console.log("------ ", err);
+        // if(err.response?.status )
+      });
   };
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       if (!auth) {
-        refreshUser().catch((err) => {
-          console.log(err);
-          setLoading(false);
-        });
+        updateUserState();
       }
 
-      const res = await fetchBlogs();
-      if (res.data.message === "jwt expired") {
-        dispatch(resetUser());
-      }
-      if (res.status === 200) {
-        setBlogs(res.data);
-        setLoading(false);
-      } else {
-        resetUserState(res);
-        setError(res.config.data.message);
-        setLoading(false);
-      }
+      fetchBlogs()
+        .then((res: AxiosResponse) => {
+          if (res.data.message === "jwt expired") {
+            resetUserState();
+            setLoading(false);
+          } else {
+            setBlogs(res.data);
+            setLoading(false);
+          }
+        })
+        .catch((err: AxiosError) => {
+          setError(err.config?.data.message);
+          if (err.status === 401 || err.response!.status === 401) {
+            resetUserState();
+            updateUserState();
+            setLoading(false);
+          }
+        });
     })();
-  }, []);
+  }, [reRender, auth]);
   return (
     <div className="min-h-screen text-indigo-200 bg-slate-950">
       <div className="container pt-6 pb-10 mx-auto">
@@ -60,9 +79,7 @@ const Blogs = () => {
           {error ? (
             <pre>{error}</pre>
           ) : loading ? (
-            <pre className="absolute scale-[200%] left-[50%] top-[50%]">
-              <Spinner />
-            </pre>
+            <Loader absolute={true} text="Loading..." />
           ) : (
             blogs?.map((blog: TBlog, index: number) => (
               <SingleBlog key={blog._id} index={index} blog={blog} />

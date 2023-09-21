@@ -25,7 +25,7 @@ const SubmitBlog = () => {
 
   const handleError = () => {
     if (input.title === "" || input.content === "") {
-      setError("Cannot post either title or description is empty!");
+      setError("Cannot post, either title or description is empty!");
       return;
     } else {
       setError(null);
@@ -49,7 +49,7 @@ const SubmitBlog = () => {
 
     const res = await postBlog(data);
     if (res.status === 200) {
-      setMessage(res.statusText);
+      setMessage(res?.statusText);
     }
 
     setLoading(false);

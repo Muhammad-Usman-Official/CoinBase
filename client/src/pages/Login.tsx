@@ -13,7 +13,7 @@ import { TLoginUser } from "../types";
 
 const Login = () => {
   const [loading, setLoading] = useState<boolean | null>(null);
-  const [error, setError] = useState<string | null>();
+  const [error, setError] = useState<string | null>(null);
   const { values, touched, handleBlur, handleChange, errors } = useFormik<{
     /* initialValues types */
     email: string;
@@ -44,38 +44,45 @@ const Login = () => {
       password: values.password,
     };
 
-    const res = await login(loginCredentials);
-
-    if (res.status === 400) {
-      const message = res.data.message;
-      setError(message);
-      setLoading(false);
-    } else if (res.code === "ERR_NETWORK") {
-      const message = res.message;
-      setError(message + " OR server down");
-      setLoading(false);
-    } else if (res.status === 200) {
-      setLoading(false);
-      setError(null);
-      navigate("/");
-    } else if (res.code !== "ERR_NETWORK") {
-      setLoading(false);
-      setError(res.message);
-    } else {
-      setLoading(false);
-      console.log(res);
-      setError(res.message);
-    }
-
-    const data = await res.data;
-    setLoading(true);
-    const user = {
-      _id: data?.user?._id,
-      email: data?.user?.email,
-      username: data?.user?.username,
-      auth: data?.auth,
-    };
-    dispatch(setUser(user));
+    login(loginCredentials)
+      .then((res: AxiosResponse) => {
+        if (!res.data) {
+          setLoading(false);
+          setError("ERROR! Failed to login");
+        }
+        setLoading(true);
+        const data = res.data;
+        const user = {
+          _id: data?.user?._id,
+          email: data?.user?.email,
+          username: data?.user?.username,
+          auth: data?.auth,
+        };
+        dispatch(setUser(user));
+        setLoading(false);
+      })
+      .catch((err: AxiosError) => {
+        if (err.status === 400) {
+          const message = err.config?.data.message;
+          setError(message);
+          setLoading(false);
+        } else if (err.code === "ERR_NETWORK") {
+          const message = err.message;
+          setError(message + " OR server down");
+          setLoading(false);
+        } else if (err.status === 200) {
+          setLoading(false);
+          setError(null);
+          navigate("/");
+        } else if (err.code !== "ERR_NETWORK") {
+          setLoading(false);
+          setError(err.message);
+        } else {
+          setLoading(false);
+          console.log(err);
+          setError(err.message + " failed to loign");
+        }
+      });
   };
 
   useEffect(() => {
@@ -178,13 +185,13 @@ const Login = () => {
                   <span className="mt-2 text-violet-300 place-self-center">
                     Don't have an account?
                     <Link
-                      className="text-black hover:underline underline-offset-[5px] ml-2 active:opacit-80 hover:text-emerald-100"
+                      className="text-black sm:text-white hover:underline underline-offset-[5px] ml-2 active:opacit-80 hover:text-emerald-100"
                       to={"/register"}
                     >
                       Sign Up
                     </Link>
                   </span>
-                  {error === null ? (
+                  {error !== null ? (
                     <span className="font-bold text-red-600 ">{error}!</span>
                   ) : (
                     ""

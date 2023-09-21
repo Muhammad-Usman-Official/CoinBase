@@ -57,8 +57,8 @@ export const logout = async () => {
   return response;
 };
 
-export const fetchBlogs = async (): Promise<AxiosResponse> => {
-  let response: AxiosResponse<TBlog[]>;
+export const fetchBlogs = async () => {
+  let response;
   try {
     response = await api.get("/blog/all");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

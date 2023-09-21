@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SingleNewsArticle from "./components/SingleNewsArticle";
 import { TArticle, TNewsApi } from "./types";
 import { fetchNews } from "./api/external";
-import Spinner from "./components/Spinner";
+import Loader from "./components/Loader";
 
 const App = () => {
   const [news, setNews] = useState<TNewsApi | undefined>();
@@ -32,9 +32,7 @@ const App = () => {
         </h1>
         <section className="grid gap-5 place-items-center">
           {loading ? (
-            <pre className="absolute scale-[200%] left-[50%] top-[50%]">
-              <Spinner />
-            </pre>
+            <Loader absolute={true} text={"Loading..."} />
           ) : (
             articles?.map((article: TArticle, index: number) => (
               <SingleNewsArticle

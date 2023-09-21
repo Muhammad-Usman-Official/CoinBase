@@ -33,7 +33,7 @@ const SingleCoin = ({ coin, index }: { coin: TCoin; index: number }) => {
         className={`${
           coin.price_change_24h.toString().charAt(0) === "-"
             ? "text-red-600"
-            : ""
+            : "text-green-500"
         } border border-indigo-900 table-cell pl-3`}
       >
         {coin.price_change_24h}
