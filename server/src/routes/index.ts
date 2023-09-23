@@ -11,6 +11,13 @@ import getCommentByIdController from "../controllers/getCommentByIdController";
 
 const router = express.Router();
 
+// TEST
+router.get("/", (req, res, next) => {
+  res.send("Home route working!");
+  res.end();
+  next();
+});
+
 // POST - SIGNUP - CREATE AN ACCOUNT
 router.post("/register", authController.register);
 // POST - LOGIN THE USER

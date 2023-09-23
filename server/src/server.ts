@@ -13,7 +13,7 @@ import { FRONT_END_URL_PATH, PORT } from "./config";
 // Express App
 const app = express();
 
-// FOR DEVELOPMENT USE ONLY
+// CORS
 app.use(
   cors({
     origin: FRONT_END_URL_PATH,
