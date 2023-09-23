@@ -1,6 +1,7 @@
 {
-  "name": "client",
+  "name": "coinbase-3c-gold",
   "private": true,
+  "homepage": "https://coinbase-3c-gold.vercel.app",
   "version": "0.1.0",
   "type": "module",
   "scripts": {

@@ -1,5 +1,9 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config({ path: __dirname + "/.env" });
+}
+
 import express from "express";
-import "dotenv/config";
+// import "dotenv/config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -9,6 +13,7 @@ import errorHandler from "./middlewares/errorHandler";
 import { TUserDto } from "./types/types";
 import { staticFilesOptions } from "./utils";
 import { FRONT_END_URL_PATH, PORT } from "./config";
+import path from "path";
 
 // Express App
 const app = express();
@@ -61,3 +66,10 @@ app.use(router);
 
 // MIDDLEWARE FOR ERROR HANDLING
 app.use(errorHandler);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client", "dist")));
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
+  });
+}
