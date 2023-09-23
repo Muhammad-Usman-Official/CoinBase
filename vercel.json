@@ -10,5 +10,10 @@
       "src": "/(.*)",
       "dest": "(/dist/server.js)"
     }
-  ]
+  ],
+  "devCommand": "npm run dev",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "outputDirectory": "dist",
+  "public": true
 }
