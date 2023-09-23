@@ -1,17 +1,14 @@
 {
   "version": 2,
   "functions": {
-    "server/dist/server.js": {
+    "server/server.js": {
       "runtime": "@vercel/node"
-    },
-    "client/dist/**/*": {
-      "runtime": "@vercel/static"
     }
   },
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "(/)"
+      "dest": "(/server.js)"
     }
   ]
 }
