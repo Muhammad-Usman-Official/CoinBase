@@ -54,11 +54,9 @@ const Register = () => {
       navigate("/");
     } else if (resCode !== "ERR_NETWORK") {
       setLoading(false);
-      console.log(response);
       setError(errorMessage);
     } else {
       setLoading(false);
-      console.log(response);
       setError(errorMessage);
     }
     const user = await response.data.user;

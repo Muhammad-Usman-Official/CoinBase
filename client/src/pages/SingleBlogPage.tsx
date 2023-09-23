@@ -20,8 +20,8 @@ const SingleBlogPage = () => {
   const [comments, setComments] = useState<TComment[]>();
   const [ownsBlog, setOwnsBlog] = useState<boolean>(false);
   const [commentInput, setCommentInput] = useState<string>("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean | null>(null);
   const [reRender, setReRender] = useState<boolean>(false);
@@ -56,8 +56,8 @@ const SingleBlogPage = () => {
       if (!blogId) return;
 
       deleteBlog(blogId)
-        .then((response: AxiosResponse) => {
-          setSuccessMessage(response.data.message);
+        .then(() => {
+          // setSuccessMessage(response.data.message);
           navigate("/blogs");
         })
         .catch((err: AxiosError) => {
@@ -102,7 +102,7 @@ const SingleBlogPage = () => {
         });
       }
       if (blogRes.status !== 200 || commentRes.status !== 200) {
-        setSuccessMessage("");
+        // setSuccessMessage("");
         setError(blogRes?.message);
         setError(commentRes?.message);
         setLoading(false);
@@ -122,8 +122,8 @@ const SingleBlogPage = () => {
       author: author,
       blog: blogId!,
     };
-    const response = await createComment(data);
-    setSuccessMessage(response.data.message);
+    await createComment(data);
+    // setSuccessMessage(response.data.message);
     setCommentInput("");
     setReRender(!reRender);
   };

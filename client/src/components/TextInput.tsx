@@ -1,5 +1,3 @@
-import React from "react";
-
 const TextInput = (props: any) => {
   return (
     <div className="flex flex-col gap-y-1">

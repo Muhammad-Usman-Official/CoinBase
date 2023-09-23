@@ -6,19 +6,19 @@ import Spinner from "../components/Spinner";
 
 const Crypto = () => {
   const [coins, setCoins] = React.useState<TCoin[]>([]);
-  const [error, setError] = React.useState<string>(undefined);
-  const [loading, setLoading] = React.useState<boolean | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+  // const [loading, setLoading] = React.useState<boolean | null>(null);
 
   useEffect(() => {
     (async () => {
-      setLoading(true);
+      // setLoading(true);
       const res = await fetchCoins();
       if (res.status === 200) {
         setCoins(res.data);
-        setLoading(false);
+        // setLoading(false);
       } else {
         setError(res.statusText);
-        setLoading(false);
+        // setLoading(false);
       }
     })();
     // cleanup

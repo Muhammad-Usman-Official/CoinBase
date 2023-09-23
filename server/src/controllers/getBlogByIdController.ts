@@ -19,7 +19,7 @@ export default async function getBlogByIdController(
   if (error) {
     return next(error);
   }
-  let blog;
+  let blog: any;
   try {
     blog = await Blog.findOne({ _id: blogId }).populate("author");
   } catch (err) {

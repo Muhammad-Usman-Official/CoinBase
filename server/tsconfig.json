@@ -2,7 +2,13 @@
   "compilerOptions": {
     // other options here
     "typeRoots": ["./node_modules/@types", "./src/types"], // tell TypeScript where to look for type definitions
-    "esModuleInterop": true // enable interop between commonjs and es modules
+    "esModuleInterop": true, // enable interop between commonjs and es modules
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "moduleResolution": "Node",
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true
   },
   "include": ["src/**/*", "src/types/types.d.ts"] // tell TypeScript which files to include in the compilation
 }

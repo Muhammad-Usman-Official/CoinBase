@@ -43,7 +43,7 @@ export default async function (
     } catch (error) {
       return next(error);
     }
-    const userDto: TUserDto = new userDTO(user);
+    const userDto: TUserDto = new userDTO(user!);
 
     req.user = userDto;
 

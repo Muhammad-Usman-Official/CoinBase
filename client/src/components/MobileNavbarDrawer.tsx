@@ -63,11 +63,13 @@ export default function MobileNavbarDrawer() {
           { name: "Post blog", link: "submit", icon: <UploadRoundedIcon /> },
         ].map((item) => (
           <ListItem key={item.name} disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              sx={{ color: "black" }}
+              component={Link}
+              to={item.link}
+            >
               <ListItemIcon>{item.icon}</ListItemIcon>
-              <Button sx={{ color: "black" }} to={item.link} component={Link}>
-                <ListItemText primary={item.name} />
-              </Button>
+              <ListItemText primary={item.name} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -84,11 +86,13 @@ export default function MobileNavbarDrawer() {
             },
           ].map((item) => (
             <ListItem key={item.name} disablePadding>
-              <ListItemButton>
+              <ListItemButton
+                sx={{ color: "black" }}
+                component={Link}
+                to={item.link}
+              >
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <Button sx={{ color: "black" }} component={Link} to={item.link}>
-                  <ListItemText primary={item.name} />
-                </Button>
+                <ListItemText primary={item.name} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -102,7 +106,7 @@ export default function MobileNavbarDrawer() {
       {(["left"] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           <Button
-            sx={{ color: "white", borderRadius: "50999%" }}
+            sx={{ color: "white", borderRadius: "50%" }}
             onClick={toggleDrawer(anchor, true)}
           >
             <MenuIcon />

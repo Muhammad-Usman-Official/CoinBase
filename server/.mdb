@@ -1,0 +1,10 @@
+{
+  "projectName": "coinbase-backend",
+  "meta": {
+    "type": "backend"
+  },
+  "backend": {
+    "platform": "node12"
+  },
+  "hash": "86141d1f"
+}

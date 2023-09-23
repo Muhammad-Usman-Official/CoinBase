@@ -2,7 +2,7 @@ import { User } from "../database/models/user";
 import { TUser, TUserDto } from "../types/types";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
-import joi, { Types } from "joi";
+import joi from "joi";
 // DTO refers to Data Transfer Object
 import userDTO from "../dto/user";
 import JWTService from "../services/JWTService";
@@ -150,7 +150,7 @@ const authController = {
     res.cookie("refreshToken", refreshToken, {
       maxAge: 1000 * 60 * 60 * 24,
     });
-    const userDto = new userDTO(user);
+    const userDto = new userDTO(user!);
     return res.status(200).json({ user: userDto, auth: true });
   },
 
@@ -226,7 +226,7 @@ const authController = {
     }
     // return the response in the form of filtered user data using dto
     const user = await User.findOne({ _id: id });
-    const userDto = new userDTO(user);
+    const userDto = new userDTO(user!);
     return res.status(200).json({ user: userDto, auth: true });
   },
 };

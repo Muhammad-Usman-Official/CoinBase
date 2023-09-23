@@ -7,14 +7,20 @@ import router from "./routes";
 import dbConnect from "./database";
 import errorHandler from "./middlewares/errorHandler";
 import { TUserDto } from "./types/types";
-import { PORT } from "./config";
 import { staticFilesOptions } from "./utils";
+import { FRONT_END_URL_PATH, PORT } from "./config";
 
 // Express App
 const app = express();
 
 // FOR DEVELOPMENT USE ONLY
-app.use(cors({ origin: process.env.FRONT_END_URL_PATH, credentials: true }));
+app.use(
+  cors({
+    origin: FRONT_END_URL_PATH,
+    credentials: true,
+    methods: ["POST", "PUT", "DELETE", "GET"],
+  })
+);
 
 // Serve JSON FILES middleware
 app.use(

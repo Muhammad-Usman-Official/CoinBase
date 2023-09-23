@@ -37,8 +37,7 @@ const Blogs = () => {
         setLoading(false);
       })
       .catch((err: AxiosError) => {
-        console.log("------ ", err);
-        // if(err.response?.status )
+        return err;
       });
   };
 

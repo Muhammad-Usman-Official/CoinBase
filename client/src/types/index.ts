@@ -11,15 +11,14 @@ export type TRegisterCredentials = {
 };
 
 export interface TArticle {
-  author: string;
   title: string;
   description: string;
   url: string;
-  urlToImage: string;
+  image: string;
   publishedAt: string;
   content: string;
   source: {
-    id: string | null;
+    url: string;
     name: string;
   };
 }

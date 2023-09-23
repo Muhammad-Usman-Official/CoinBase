@@ -5,7 +5,7 @@ export const staticFilesOptions = {
   index: false,
   maxAge: "1d",
   redirect: false,
-  setHeaders(res, path, stat) {
+  setHeaders(res: any, path: any, stat: any) {
     res.set("x-timestamp", Date.now());
   },
 };

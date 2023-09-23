@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "server.ts",
   "scripts": {
-    "dev2": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/server.ts\"",
-    "dev": "tsnd --respawn src/server.ts"
+    "dev": "tsnd --respawn src/server.ts",
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "usman",

@@ -28,7 +28,7 @@ export default async function updateBlogController(
 
   const { blogId, title, content, photo, author } = req.body;
 
-  let blog: TBlog;
+  let blog: TBlog | null;
   try {
     blog = await Blog.findOne({ _id: blogId });
   } catch (err) {
@@ -37,6 +37,7 @@ export default async function updateBlogController(
 
   if (photo) {
     try {
+      if (!blog) return;
       const prevPhoto = blog.photoPath;
       const prevPhotoPath = prevPhoto.split("/").at(-1);
       unlinkSync(`src/public/${prevPhotoPath}.png`);

@@ -25,12 +25,7 @@ const Login = () => {
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: (values) => {
-      console.log(
-        "log of <Login /> component printing values of onSubmit function inside of useFormik hook: ",
-        values
-      );
-    },
+    onSubmit: () => {},
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -79,7 +74,6 @@ const Login = () => {
           setError(err.message);
         } else {
           setLoading(false);
-          console.log(err);
           setError(err.message + " failed to loign");
         }
       });
@@ -96,7 +90,6 @@ const Login = () => {
             username: data.user?.username,
             auth: data.auth,
           };
-          console.log(res);
           dispatch(setUser(user));
           navigate("/");
         }
