@@ -7,5 +7,11 @@
     "client/dist/**/*": {
       "runtime": "@vercel/static"
     }
-  }
+  },
+  "routes": [
+    {
+      "source": "/(.*)",
+      "destination": "(/)"
+    }
+  ]
 }
