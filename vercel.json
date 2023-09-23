@@ -1,19 +1,11 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "./server/server.ts",
-      "use": "@vercel/node"
+  "functions": {
+    "server/server.ts": {
+      "runtime": "@vercel/node"
     },
-    {
-      "src": "./client/dist",
-      "use": "@vercel/static"
+    "client/dist/**/*": {
+      "runtime": "@vercel/static"
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/server/server.ts"
-    }
-  ]
+  }
 }
