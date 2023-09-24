@@ -9,6 +9,7 @@ import errorHandler from "./middlewares/errorHandler";
 import { TUserDto } from "./types/types";
 import { staticFilesOptions } from "./utils";
 import { FRONT_END_URL_PATH, PORT } from "./config";
+import path from "path";
 // import path from "path";
 
 // Express App
@@ -43,7 +44,15 @@ declare global {
 }
 
 // serve static files like images
-app.use("/public", express.static("src/public", staticFilesOptions));
+app.use("/public", express.static("public", staticFilesOptions));
+
+app.use(express.static(path.join(__dirname, "./client/dist")));
+
+app.get("*", (_, res) => {
+  res.sendFile(path.join(__dirname, "./client/dist/index.html"), (err) => {
+    res.status(500).send(err);
+  });
+});
 
 // ROUTES HANDLER MIDDLEWARE
 app.use(router);

@@ -40,7 +40,7 @@ export default async function updateBlogController(
       if (!blog) return;
       const prevPhoto = blog.photoPath;
       const prevPhotoPath = prevPhoto.split("/").at(-1);
-      unlinkSync(`src/public/${prevPhotoPath}.png`);
+      unlinkSync(`public/${prevPhotoPath}.png`);
     } catch (err) {
       return next(err);
     }
@@ -51,7 +51,7 @@ export default async function updateBlogController(
 
     const imageName = `${Date.now()}-${author}`;
     try {
-      writeFileSync(`src/public/${imageName}.png`, buffer);
+      writeFileSync(`public/${imageName}.png`, buffer);
     } catch (err) {
       return next(err);
     }

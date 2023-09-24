@@ -46,7 +46,7 @@ export default async function createBlogController(
 
   const imageName = `${Date.now()}-${author}`;
   try {
-    fs.writeFileSync(`src/public/${imageName}.png`, buffer);
+    fs.writeFileSync(`public/${imageName}.png`, buffer);
   } catch (err) {
     return next(err);
   }

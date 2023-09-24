@@ -10,9 +10,7 @@ import {
   TSubmitBLog,
   TUser,
 } from "../types";
-
-const homeUri = import.meta.env
-  .VITE_API_BASE_URL; /*  ?? "http://localhost:3000" */
+import { homeUri } from "../config";
 
 const api = axios.create({
   baseURL: homeUri,
