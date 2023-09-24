@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "src/server.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "tsnd --respawn src/server.ts",
     "build": "tsc -p ."
