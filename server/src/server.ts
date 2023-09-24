@@ -1,7 +1,3 @@
-/* if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config({ path: __dirname + "/.env" });
-} */
-
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
@@ -66,11 +62,3 @@ app.use(router);
 
 // MIDDLEWARE FOR ERROR HANDLING
 app.use(errorHandler);
-
-/* if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client", "dist")));
-  app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
-  });
-}
- */

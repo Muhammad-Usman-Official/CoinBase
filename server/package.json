@@ -1,11 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "server.ts",
+  "main": "server.js",
   "scripts": {
     "dev": "tsnd --respawn src/server.ts",
-    "build": "tsc -p .",
-    "start": "node src/server.js"
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "usman",
