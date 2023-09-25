@@ -3,9 +3,10 @@
     // other options here
     "typeRoots": ["./node_modules/@types", "./types"], // tell TypeScript where to look for type definitions
     "esModuleInterop": true, // enable interop between commonjs and es modules
-    "rootDir": "./",
     "moduleResolution": "Node",
     "declaration": true,
+    "rootDir": ".",
+    "lib": ["ES2021", "ES2022", "ES2023"],
     "sourceMap": true,
     "strict": true
   },

@@ -5,14 +5,12 @@ if (process.env.CYCLIC_ENV !== "production") {
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
-import router from "./routes";
-import dbConnect from "./database";
-import errorHandler from "./middlewares/errorHandler";
-import { TUserDto } from "./types/types";
-import { staticFilesOptions } from "./utils";
-import { FRONT_END_URL_PATH, PORT } from "./config";
-import path from "path";
+import router from "./src/routes/index";
+import dbConnect from "./src/database/index";
+import errorHandler from "./src/middlewares/errorHandler";
+import { TUserDto } from "./src/types/index";
+import { staticFilesOptions } from "./src/utils/index";
+import { FRONT_END_URL_PATH, PORT } from "./src/config/index";
 
 // Express App
 const app = express();
@@ -46,15 +44,7 @@ declare global {
 }
 
 // serve static files like images
-app.use("/public", express.static("public", staticFilesOptions));
-
-app.use(express.static(path.join(__dirname, "./client/dist")));
-
-app.get("*", (_, res) => {
-  res.sendFile(path.join(__dirname, "./client/dist/index.html"), (err) => {
-    res.status(500).send(err);
-  });
-});
+app.use("/storage", express.static("storage", staticFilesOptions));
 
 // ROUTES HANDLER MIDDLEWARE
 app.use(router);
@@ -67,7 +57,7 @@ app.use(router);
       console.log(`Server is listening on port ${PORT}`);
     })
     .catch((err) => {
-      console.error("DATABASE ERROR!!!!!! " + err);
+      console.error("DATABASE ERROR! ->" + err);
     });
 })();
 
