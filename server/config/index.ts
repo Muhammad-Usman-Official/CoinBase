@@ -8,10 +8,10 @@ const {
   MONGO_URL,
 } = process.env;
 
-const FRONT_END_URL_PATH = FRONT_END_BASE_URL ?? "http://localhost:5173";
+const FRONT_END_URL_PATH = FRONT_END_BASE_URL ?? "http://localhost:3000";
 const PORT = process.env.PORT ?? 3000;
 const BACKEND_SERVER_PATH =
-  BACKEND_SERVER_BASE_URL || `http://localhost:${PORT}`;
+  BACKEND_SERVER_BASE_URL ?? `http://localhost:${PORT}`;
 
 export {
   ACCESS_TOKEN_SECRET,

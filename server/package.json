@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsnd --respawn server.ts",
     "build": "tsc -p .",
-    "start": "node dist/server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "usman",
