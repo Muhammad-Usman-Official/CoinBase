@@ -1,5 +1,8 @@
+if (process.env.CYCLIC_ENV !== "production") {
+  require("dotenv/config");
+}
+
 import express from "express";
-import "dotenv/config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -10,7 +13,6 @@ import { TUserDto } from "./types/types";
 import { staticFilesOptions } from "./utils";
 import { FRONT_END_URL_PATH, PORT } from "./config";
 import path from "path";
-// import path from "path";
 
 // Express App
 const app = express();

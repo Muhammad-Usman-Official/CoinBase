@@ -1,4 +1,6 @@
-import "dotenv/config";
+if (process.env.CYCLIC_ENV !== "production") {
+  require("dotenv/config");
+}
 
 const {
   ACCESS_TOKEN_SECRET,
