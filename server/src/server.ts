@@ -5,12 +5,12 @@ if (process.env.CYCLIC_ENV !== "production") {
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import router from "./src/routes/index";
-import dbConnect from "./src/database/index";
-import errorHandler from "./src/middlewares/errorHandler";
-import { TUserDto } from "./src/types/index";
-import { staticFilesOptions } from "./src/utils/index";
-import { FRONT_END_URL_PATH, PORT } from "./src/config/index";
+import router from "./routes/index";
+import dbConnect from "./database/index";
+import errorHandler from "./middlewares/errorHandler";
+import { TUserDto } from "./types/index";
+import { staticFilesOptions } from "./utils/index";
+import { FRONT_END_URL_PATH, PORT } from "./config/index";
 
 // Express App
 const app = express();

@@ -10,5 +10,5 @@
     "sourceMap": true,
     "strict": true
   },
-  "include": ["./server.ts", "./types/types.ts"] // tell TypeScript which files to include in the compilation
+  "include": ["./src/server.ts", "./src/types/types.ts"] // tell TypeScript which files to include in the compilation
 }
