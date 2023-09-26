@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosResponse } from "axios";
 import { TCoin, TNewsApi } from "../types";
-
-const NEWS_API_KEY = import.meta.env.VITE_NEWS_API_KEY;
+import { NEWS_API_KEY } from "./config";
 
 const newsApiCatagory = "general";
 const NEWS_REQUEST_URL = `https://gnews.io/api/v4/top-headlines?category=${newsApiCatagory}&lang=en&country=us&max=30&apikey=${NEWS_API_KEY}`;

@@ -10,7 +10,7 @@ import {
   TSubmitBLog,
   TUser,
 } from "../types";
-import { homeUri } from "../config";
+import { homeUri } from "./config";
 
 const api = axios.create({
   baseURL: homeUri,
