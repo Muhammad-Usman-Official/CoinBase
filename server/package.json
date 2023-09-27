@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/src/server.js",
   "scripts": {
-    "dev": "tsnd --respawn server.ts",
+    "dev": "tsnd --respawn src/server.ts",
     "build": "tsc -p .",
     "start": "node dist/src/server.js"
   },

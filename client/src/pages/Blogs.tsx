@@ -13,7 +13,6 @@ const Blogs = () => {
   const [loading, setLoading] = React.useState<null | boolean>(null);
   const [reRender, setReRender] = React.useState<boolean>(false);
 
-  console.log(blogs);
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.user.auth);
   if (!auth) setReRender(!reRender);
@@ -24,6 +23,7 @@ const Blogs = () => {
   };
 
   const updateUserState = async () => {
+    setLoading(true);
     refreshUser()
       .then((res: AxiosResponse) => {
         setLoading(true);
@@ -38,6 +38,7 @@ const Blogs = () => {
         setLoading(false);
       })
       .catch((err: AxiosError) => {
+        setLoading(false);
         return err;
       });
   };
@@ -51,7 +52,6 @@ const Blogs = () => {
 
       fetchBlogs()
         .then((res: AxiosResponse) => {
-          console.log(res);
           if (res.data.message === "jwt expired") {
             resetUserState();
             setLoading(false);

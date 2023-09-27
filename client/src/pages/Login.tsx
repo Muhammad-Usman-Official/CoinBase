@@ -41,12 +41,13 @@ const Login = () => {
 
     login(loginCredentials)
       .then((res: AxiosResponse) => {
+        setLoading(true);
         if (!res.data) {
           setLoading(false);
           setError("ERROR! Failed to login");
         }
-        setLoading(true);
         const data = res.data;
+
         const user = {
           _id: data?.user._id,
           email: data?.user.email,
@@ -94,7 +95,6 @@ const Login = () => {
         }
       })
       .catch((err: AxiosError) => {
-        // debugger;
         console.log(err);
       });
   }, []);

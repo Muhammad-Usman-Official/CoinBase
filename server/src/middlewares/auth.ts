@@ -30,10 +30,6 @@ export default async function (
       ) as JwtPayload;
       _id = verifyService._id;
     } catch (error) {
-      console.log(
-        "auth.ts try-catch error JWTService.verifyAccessToken failed to verify!!!",
-        error
-      );
       return next(error);
     }
 

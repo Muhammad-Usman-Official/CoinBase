@@ -8,6 +8,7 @@ import userDTO from "../dto/user";
 import JWTService from "../services/JWTService";
 import RefreshToken from "../database/models/token";
 import { JwtPayload } from "jsonwebtoken";
+import { AsyncLocalStorage } from "async_hooks";
 
 const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,25}$/;
 const authController = {
@@ -66,8 +67,8 @@ const authController = {
         password: hashedPass,
       });
       user = await userToRegister.save();
-      accessToken = JWTService.signAccessToken({ _id: user._id }, "30m");
-      refreshToken = JWTService.signRefreshToken({ _id: user._id }, "60m");
+      accessToken = JWTService.signAccessToken({ _id: user._id }, "2d");
+      refreshToken = JWTService.signRefreshToken({ _id: user._id }, "3d");
       userDto = new userDTO(user);
     } catch (err) {
       return next(err);
@@ -76,12 +77,14 @@ const authController = {
     //store refresh token in db
     await JWTService.storeRefreshToken(refreshToken, user._id);
     res.cookie("accessToken", accessToken, {
-      maxAge: 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60 * 60 * 24 * 2,
       httpOnly: true, // prevent XSS attacks
+      sameSite: "none",
     });
     res.cookie("refreshToken", refreshToken, {
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 60 * 24 * 3,
       httpOnly: true,
+      sameSite: "none",
     });
     res.status(201).json({ user: userDto, auth: true });
   },
@@ -98,7 +101,6 @@ const authController = {
 
     // 2. if error in validation -> throw error
     if (error) {
-      console.log(error);
       const err = {
         status: 409,
         message: error,
@@ -125,12 +127,8 @@ const authController = {
       });
     }
     // 4. return response\
-    const accessToken = JWTService.signAccessToken({ _id: user!._id }, "30min");
-    const refreshToken = JWTService.signRefreshToken(
-      { _id: user!._id },
-      "60min"
-    );
-
+    const accessToken = JWTService.signAccessToken({ _id: user!._id }, "2d");
+    const refreshToken = JWTService.signRefreshToken({ _id: user!._id }, "3d");
     // update refresh token in database
     try {
       await RefreshToken.updateOne(
@@ -145,11 +143,14 @@ const authController = {
     }
 
     res.cookie("accessToken", accessToken, {
-      maxAge: 1000 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 2,
+      sameSite: "none",
     });
     res.cookie("refreshToken", refreshToken, {
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 3,
+      sameSite: "none",
     });
+    JWTService.storeRefreshToken(refreshToken, user!._id);
     const userDto = new userDTO(user!);
     return res.status(200).json({ user: userDto, auth: true });
   },
@@ -160,7 +161,6 @@ const authController = {
     try {
       await RefreshToken.deleteOne({ token: refreshToken });
     } catch (err) {
-      console.log("failed to delete refreshToken in the database");
       next(err);
     }
     res.clearCookie("accessToken");
@@ -204,22 +204,25 @@ const authController = {
       return next(err);
     }
     // generate the refresh token
+    let refreshToken;
 
     try {
-      const accessToken = JWTService.signAccessToken({ _id: id }, "30m");
+      const accessToken = JWTService.signAccessToken({ _id: id }, "2d");
 
-      const refreshToken = JWTService.signRefreshToken({ _id: id }, "60m");
+      refreshToken = JWTService.signRefreshToken({ _id: id }, "3d");
 
       await RefreshToken.updateOne({ token: refreshToken }, { _id: id });
 
       res.cookie("refreshToken", refreshToken, {
-        maxAge: 1000 * 60 * 60 * 24,
+        maxAge: 1000 * 60 * 60 * 24 * 3,
         httpOnly: true,
+        sameSite: "none",
       });
 
       res.cookie("accessToken", accessToken, {
-        maxAge: 1000 * 60 * 60 * 24,
+        maxAge: 1000 * 60 * 60 * 24 * 2,
         httpOnly: true,
+        sameSite: "none",
       });
     } catch (err) {
       return next(err);

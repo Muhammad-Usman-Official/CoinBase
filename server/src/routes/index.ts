@@ -13,7 +13,7 @@ const router = express.Router();
 
 // TEST
 router.get("/", (_, res) => {
-  res.send("Home route working!");
+  res.send("server working!");
   res.end();
 });
 
