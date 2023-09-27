@@ -52,7 +52,7 @@ export default async function updateBlogController(
 
     const imageName = `${currDate}-${author}`;
     try {
-      const pathToStoreImage = `storage/${imageName}.png`;
+      const pathToStoreImage = `tmp/${imageName}.png`;
       writeFileSync(pathToStoreImage, buffer);
     } catch (err) {
       return next(err);
@@ -62,7 +62,7 @@ export default async function updateBlogController(
         _id: blogId,
       },
       {
-        photoPath: `${BACKEND_SERVER_PATH}/storage/${imageName}`,
+        photoPath: `${BACKEND_SERVER_PATH}/tmp/${imageName}`,
       }
     );
   } else {

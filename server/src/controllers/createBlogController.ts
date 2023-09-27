@@ -50,7 +50,7 @@ export default async function createBlogController(
 
   const imageName = `${currDate}_${author}`;
   try {
-    const pathToStoreImage = `storage/${imageName}.png`;
+    const pathToStoreImage = `tmp/${imageName}.png`;
     fs.writeFileSync(pathToStoreImage, buffer);
   } catch (err) {
     return next(err);
@@ -62,7 +62,7 @@ export default async function createBlogController(
       title,
       author,
       content,
-      photoPath: `${BACKEND_SERVER_PATH}/storage/${imageName}`,
+      photoPath: `${BACKEND_SERVER_PATH}/tmp/${imageName}`,
     });
   } catch (err) {
     return next(err);
