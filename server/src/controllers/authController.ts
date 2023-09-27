@@ -80,11 +80,13 @@ const authController = {
       maxAge: 1000 * 60 * 60 * 60 * 24 * 2,
       httpOnly: true, // prevent XSS attacks
       sameSite: "none",
+      secure: true,
     });
     res.cookie("refreshToken", refreshToken, {
       maxAge: 1000 * 60 * 60 * 60 * 24 * 3,
       httpOnly: true,
       sameSite: "none",
+      secure: true,
     });
     res.status(201).json({ user: userDto, auth: true });
   },
@@ -145,10 +147,12 @@ const authController = {
     res.cookie("accessToken", accessToken, {
       maxAge: 1000 * 60 * 60 * 24 * 2,
       sameSite: "none",
+      secure: true,
     });
     res.cookie("refreshToken", refreshToken, {
       maxAge: 1000 * 60 * 60 * 24 * 3,
       sameSite: "none",
+      secure: true,
     });
     JWTService.storeRefreshToken(refreshToken, user!._id);
     const userDto = new userDTO(user!);
@@ -217,12 +221,14 @@ const authController = {
         maxAge: 1000 * 60 * 60 * 24 * 3,
         httpOnly: true,
         sameSite: "none",
+        secure: true,
       });
 
       res.cookie("accessToken", accessToken, {
         maxAge: 1000 * 60 * 60 * 24 * 2,
         httpOnly: true,
         sameSite: "none",
+        secure: true,
       });
     } catch (err) {
       return next(err);
