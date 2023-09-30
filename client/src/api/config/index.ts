@@ -1,6 +1,5 @@
 const BACKEND_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const NEWS_API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-console.log("news api key: ", NEWS_API_KEY);
+
 let homeUri: string;
 
 const development: boolean =
@@ -12,5 +11,6 @@ if (development) {
 } else {
   homeUri = BACKEND_BASE_URL;
 }
+const NEWS_API_KEY = "7146786b31df32545b59c97de0c2207b";
 
 export { homeUri, NEWS_API_KEY };

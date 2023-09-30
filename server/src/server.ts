@@ -1,3 +1,7 @@
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  require("dotenv/config");
+}
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";

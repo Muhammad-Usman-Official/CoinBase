@@ -1,7 +1,3 @@
-if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  require("dotenv/config");
-}
-
 const {
   ACCESS_TOKEN_SECRET,
   BACKEND_SERVER_BASE_URL,
