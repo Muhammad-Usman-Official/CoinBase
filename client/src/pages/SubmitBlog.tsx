@@ -78,7 +78,6 @@ const SubmitBlog = () => {
         onSubmit={handleBlogSumit}
         className="container flex flex-col items-center max-w-xl pt-3 pb-3 mx-auto gap-y-3"
       >
-        {/* <input type="text" /> */}
         <section className="w-full py-2 mx-auto space-y-4">
           <label className="text-2xl" htmlFor="title">
             Blog Title
@@ -136,7 +135,7 @@ const SubmitBlog = () => {
             <div className="w-full pt-2 pb-3 h-fit">
               <img
                 alt=""
-                className="object-contain mx-auto"
+                className="object-contain max-w-[230px] mx-auto"
                 src={input.photo!.toString()}
               />
             </div>

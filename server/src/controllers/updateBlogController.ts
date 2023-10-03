@@ -40,8 +40,9 @@ export default async function updateBlogController(
     try {
       if (!blog) return;
       const prevPhoto = blog.photoPath;
+
       const prevPhotoPath = prevPhoto.split("/").at(-1);
-      unlinkSync(path.join(__dirname, `storage/${prevPhotoPath}.png`));
+      unlinkSync(`storage/${prevPhotoPath}.png`);
     } catch (err) {
       return next(err);
     }
@@ -52,7 +53,7 @@ export default async function updateBlogController(
 
     const imageName = `${currDate}-${author}`;
     try {
-      const pathToStoreImage = `tmp/${imageName}.png`;
+      const pathToStoreImage = `storage/${imageName}.png`;
       writeFileSync(pathToStoreImage, buffer);
     } catch (err) {
       return next(err);
@@ -62,7 +63,7 @@ export default async function updateBlogController(
         _id: blogId,
       },
       {
-        photoPath: `${BACKEND_SERVER_PATH}/tmp/${imageName}`,
+        photoPath: `${BACKEND_SERVER_PATH}/storage/${imageName}`,
       }
     );
   } else {

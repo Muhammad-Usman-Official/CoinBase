@@ -3,6 +3,3 @@ node_modules
 yarn.lock
 /dist
 package-lock.json
-/client/package-lock.json
-/client/node_modules
-/client/.env

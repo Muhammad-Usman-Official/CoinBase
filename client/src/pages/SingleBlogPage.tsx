@@ -155,7 +155,7 @@ const SingleBlogPage = () => {
               </section>
               <section className="pt-3 rounded-xl px-7 pb-7 bg-slate-900/40 mt-7">
                 <div className="flex items-center justify-between">
-                  <h1 className="pt-3 text-5xl font-semibold text-indigo-200">
+                  <h1 className="pt-3 pr-3 text-5xl font-semibold text-indigo-200">
                     {blog?.title}
                   </h1>
                   {ownsBlog ? (

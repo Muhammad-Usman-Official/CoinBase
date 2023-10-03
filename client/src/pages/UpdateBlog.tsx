@@ -6,6 +6,7 @@ import { editBlog, fetchBLogById } from "../api/internal";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { useParams } from "react-router-dom";
+import { AxiosError, AxiosResponse } from "axios";
 
 const UpdateBlog = () => {
   const navigate = useNavigate();
@@ -59,14 +60,21 @@ const UpdateBlog = () => {
       };
     }
 
-    const res = await editBlog(data);
-    if (res.status === 200) {
-      setMessage(res.statusText);
-    }
-
-    setLoading(false);
-    setInput({ title: "", content: "", photo: "" });
-    navigate(`/blog/${blogId}`);
+    editBlog(data)
+      .then((res: AxiosResponse<{ message: string }>) => {
+        setMessage(res.statusText);
+        if (res.data.message === "blog updated") {
+          setLoading(false);
+          navigate(`/blog/${blogId}`);
+        } else {
+          setLoading(false);
+          setMessage(res.data.message);
+        }
+      })
+      .catch((err: AxiosError) => {
+        setLoading(false);
+        setMessage(err.message);
+      });
   };
 
   const handleGetPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,10 +164,10 @@ const UpdateBlog = () => {
             onChange={handleGetPhoto}
             type="file"
           />
-          <div className="w-full h-fit pb-3 pt-2">
+          <div className="w-full pt-2 pb-3 h-fit">
             <img
               alt=""
-              className="object-contain"
+              className="object-contain max-w-[230px] mx-auto"
               src={input.photo!.toString()}
             />
           </div>
